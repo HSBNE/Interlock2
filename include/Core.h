@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 #include <ESP8266HTTPClient.h>
+#include <WiFiClientSecureBearSSL.h>
 
 enum State {
    IDLE, // Normal state of interlock (not being used)
@@ -49,8 +50,7 @@ extern const uint8_t ledType;
 extern const uint32_t rfidIgnoreTime;
 
 // Server
-extern const uint16_t checkinRate;
-extern const uint16_t sessionCheckinRate;
+extern const uint16_t serverUpdateRate;
 
 extern const char* deviceTypeStr;
 extern const bool normallyOpen;
@@ -66,4 +66,6 @@ extern const long skeletonKeyCardNumber;
 }
 
 void log(String message);
+
+String httpGET(HTTPClient* httpClientPtr, String url);
 

@@ -33,8 +33,7 @@ const uint8_t ledType = NEO_BGRW + NEO_KHZ800; // Most interlocks are GRB, most 
 const uint32_t rfidIgnoreTime = 5; // How long (s) to ignore RFID reads after one has been read.
 
 // Server
-const uint16_t checkinRate = 60; // How long (s) between server checkins
-const uint16_t sessionCheckinRate = 60; // How long (s) between intelrock checkins
+const uint16_t serverUpdateRate = 60; // How long (s) between server checkins
 
 // ===============================================================================
 //                           End Of Configurable Values
@@ -54,3 +53,15 @@ State currentState = State::LOADING;
 
 }
 
+// Performs an HTTP GET request on the URL.
+// Returns "" on error.
+String httpGET(HTTPClient* httpClientPtr, String url) {
+    std::unique_ptr<BearSSL::WiFiClientSecure>SSLClient(new BearSSL::WiFiClientSecure);
+    SSLClient->setInsecure();
+    (*httpClientPtr).begin(*SSLClient, url);
+    if ((*httpClientPtr).GET() == HTTP_CODE_OK) {
+        return (*httpClientPtr).getString();
+    }
+
+    return "";
+}

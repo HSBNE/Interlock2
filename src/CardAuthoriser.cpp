@@ -16,16 +16,10 @@ bool CardAuthoriser::checkCard(long cardNumber) {
     
     bool accessGranted;
 
-    // SSL
-    String url = String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/check/" + String(cardNumber) + "/?secret=" + String(Core::hostSecret);
-    std::unique_ptr<BearSSL::WiFiClientSecure>SSLClient(new BearSSL::WiFiClientSecure);
-    SSLClient->setInsecure();
-    (*CardAuthoriser::httpClientPtr).begin(*SSLClient, url);
-
     // HTTP
-    if ((*CardAuthoriser::httpClientPtr).GET() == HTTP_CODE_OK) {
+    String payload = httpGET(CardAuthoriser::httpClientPtr, String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/check/" + String(cardNumber) + "/?secret=" + String(Core::hostSecret));
+    if (payload != "") {
         // Auth with network
-        String payload = (*CardAuthoriser::httpClientPtr).getString();
         const size_t capacity = JSON_OBJECT_SIZE(4) + 90;
         DynamicJsonDocument doc(capacity);
         deserializeJson(doc, payload);
@@ -41,3 +35,25 @@ bool CardAuthoriser::checkCard(long cardNumber) {
     log("Access " + accessStr +" to " + String(cardNumber) );
     return accessGranted;
 }
+
+void CardAuthoriser::update() {
+    // Get HTTP checkin response
+    String payload = httpGET(CardAuthoriser::httpClientPtr, String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/checkin/?secret=" + String(Core::hostSecret));
+
+    // Check for success
+    if (payload == "") {
+        return;
+    }
+
+    // Parse JSON
+    const size_t capacity = JSON_OBJECT_SIZE(3) + 70;
+    DynamicJsonDocument jsonDoc(capacity);
+    String serverHash = jsonDoc["hashOfTags"].as<String>();
+
+    // Check if the cache needs updating an do so if required.
+    if (serverHash != cache.getHash()) {
+        cache.updateCacheFile();
+    }
+
+}
+

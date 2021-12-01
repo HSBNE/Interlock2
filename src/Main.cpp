@@ -188,12 +188,13 @@ inline void accessDeniedAction() {
 }
 
 inline void errorAction() {
+    // TODO
 }
 
-// State global. Everything runs off this.
 
+
+unsigned long lastTime = 0;
 void loop() {
-
     static State lastState;
 
     if (lastState != Core::currentState) {
@@ -238,6 +239,12 @@ void loop() {
 
     // OTA
     ArduinoOTA.handle();
+
+    // Server updates
+    if ((millis() - lastTime) / 1000 > Core::serverUpdateRate) {
+        lastTime = millis();
+        cardAuthoriser.update();
+    }
 
     // Delay
     delay(500);
