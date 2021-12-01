@@ -1,5 +1,4 @@
 #include "RFIDReader.h"
-#include "Core.h"
 
 // Clear the serial buffer
 void RFIDReader::flush() {

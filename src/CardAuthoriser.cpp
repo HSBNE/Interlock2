@@ -1,5 +1,4 @@
 #include "CardAuthoriser.h"
-#include "Core.h"
 
 CardAuthoriser::CardAuthoriser(HTTPClient *client) : cache(client) {
     CardAuthoriser::httpClientPtr = client;

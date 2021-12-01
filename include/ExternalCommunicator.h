@@ -24,7 +24,7 @@ class ExternalCommunicator {
     // Servers
     WebSocketsServer websocketServer = WebSocketsServer(81);
     ESP8266WebServer httpServer = ESP8266WebServer(80);
-    static ESP8266WebServer* httpServerPtr; // Used for a god awful hack to allow HTTP functions access to the HTTP server
+    static ESP8266WebServer* httpServerPtr; // Should probably be a reference but lazy.
 
     // HTTP;
     static void httpRoot(); // Action to take on http://device.local/

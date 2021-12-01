@@ -14,6 +14,7 @@ Indicator indicator;
 ExternalCommunicator external;
 CardAuthoriser cardAuthoriser(&httpClient);
 
+// TODO it would be nice to move this so it's implemented in Core.cpp In the current scheme Core.h is implmented in two files (here and Core.cpp)
 void log(String message) {
     Serial.println(message);
     external.broadcast(message);
@@ -49,9 +50,6 @@ void setRelay(bool accessGranted) {
 }
 
 void setup() {
-    // Disable watchdog (always a fantstic idea...)
-    // ESP.wdtDisable();
-
     // Serial
     Serial.begin(9600);
     delay(500);

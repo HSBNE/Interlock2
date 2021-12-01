@@ -3,7 +3,6 @@
 #include "Core.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>
-#include <ESP8266HTTPClient.h>
 #include <mem.h>
 
 class Cache {

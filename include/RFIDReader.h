@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core.h"
+
 class RFIDReader {
     public:
         long readCard();
