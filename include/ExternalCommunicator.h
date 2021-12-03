@@ -5,12 +5,13 @@
 
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
+#include <CardAuthoriser.h>
 
 #include "Core.h"
 
 class ExternalCommunicator {
    public:
-    ExternalCommunicator();
+    ExternalCommunicator(CardAuthoriser* cardAuthoriser);
     void loop();  // Loops the websocket and HTTP servers. To be called in the main loop.
     void broadcast(String message);  // Broadcasts logs
 
@@ -24,7 +25,8 @@ class ExternalCommunicator {
     // Servers
     WebSocketsServer websocketServer = WebSocketsServer(81);
     ESP8266WebServer httpServer = ESP8266WebServer(80);
-    static ESP8266WebServer* httpServerPtr; // Should probably be a reference but lazy.
+    static ESP8266WebServer* httpServerPtr; // Should probably be references but lazy.
+    static CardAuthoriser* cardAuthoriserPtr;
 
     // HTTP;
     static void httpRoot(); // Action to take on http://device.local/

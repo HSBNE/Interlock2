@@ -5,14 +5,12 @@
 #include "ExternalCommunicator.h"
 
 #include <ArduinoOTA.h>
-#include <ESP8266WiFi.h>
 
 // Objects
 RFIDReader rfidReader;
-HTTPClient httpClient;
 Indicator indicator;
-ExternalCommunicator external;
-CardAuthoriser cardAuthoriser(&httpClient);
+CardAuthoriser cardAuthoriser;
+ExternalCommunicator external(&cardAuthoriser); // External communicator is a misleading name.
 
 // TODO it would be nice to move this so it's implemented in Core.cpp In the current scheme Core.h is implmented in two files (here and Core.cpp)
 void log(String message) {
@@ -95,7 +93,8 @@ void setup() {
     });
     ArduinoOTA.begin();
 
-    // Websockets
+    // Card Authoriser and Cache
+    cardAuthoriser.begin();
 
     // Exit BOOTING State
     Core::currentState = State::IDLE;

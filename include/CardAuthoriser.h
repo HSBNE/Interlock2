@@ -10,11 +10,11 @@
 
 class CardAuthoriser {
     public:
-        CardAuthoriser(HTTPClient *client);
+        CardAuthoriser();
         bool checkCard(long cardNumber); // True if the card is authroised. False otherwise.
         void update(); // Talks to the serve to update cache.
+        void begin();
         
     private:
         Cache cache;
-        HTTPClient *httpClientPtr;
 };

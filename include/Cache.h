@@ -7,14 +7,14 @@
 
 class Cache {
     public:
-        Cache(HTTPClient *client);
+        Cache();
+        void begin();
         String getHash();
-        void updateCacheFile();
         bool checkCacheForCard(long cardNumber); // Returns true if the card was in the cache.
+        bool updateCacheFile();
     private:
         String hash;
         bool tagsLoadedInMemory = false; // Prevents reloading the cache file if the tags are already stored in memory
         int cacheArray[200]; // Where the cards are stored in memory.
-        HTTPClient *httpClientPtr;
-        inline void readCacheContentsToMemory();
+        bool readCacheContentsToMemory();
 };

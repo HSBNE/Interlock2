@@ -18,7 +18,7 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
 
     // Set the color of the LEDs
     // Uses RGBW color values
-    uint16_t color;
+    uint32_t color;
     switch (Core::currentState) {
         case State::LOADING:
             // Purple
@@ -51,8 +51,6 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
             break;
     }
 
-    
-    Indicator::indicatorLEDs.fill(color);
+    Indicator::indicatorLEDs.fill(color, 0, 0);
     Indicator::indicatorLEDs.show();
-    log("Color set to: " + String(color));
 }

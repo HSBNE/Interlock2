@@ -3,11 +3,14 @@
 // Initialize static members.
 bool ExternalCommunicator::changeStateFlag = false;
 State ExternalCommunicator::changeState = State::ERROR;
-ESP8266WebServer* ExternalCommunicator::httpServerPtr = 0;
+ESP8266WebServer* ExternalCommunicator::httpServerPtr = nullptr;
+CardAuthoriser* ExternalCommunicator::cardAuthoriserPtr = nullptr;
 
-ExternalCommunicator::ExternalCommunicator() {
-    // Assign server ptr. It's used to allow the static HTTP methods access to the webserver.
+
+ExternalCommunicator::ExternalCommunicator(CardAuthoriser* cardAuthoriser) {
+    // Assign server ptrs. It's used to allow the static HTTP methods access to the webserver.
     ExternalCommunicator::httpServerPtr = &(ExternalCommunicator::httpServer);
+    ExternalCommunicator::cardAuthoriserPtr = cardAuthoriser;
 
     // Setup websockets
     ExternalCommunicator::websocketServer.begin();
@@ -56,16 +59,19 @@ void ExternalCommunicator::httpReboot() {
     log("Rebooting");
     ExternalCommunicator::httpRedirectToRoot();
     delay(100);
-    ESP.restart();
+    ESP.reset();
 }
 
-// Action to take on http://device.local/activate
-// Turns on an interlock (ACCESS_GRANTED state)
+// Action to take on http://device.local/activate?cardid=XXXX
+// Turns on an interlock (ACCESS_GRANTED state) if cardid is valid
 void ExternalCommunicator::httpActivate() {
-    log("Activating interlock");
-    ExternalCommunicator::changeState = State::ACCESS_GRANTED;
-    ExternalCommunicator::changeStateFlag = true;
-    ExternalCommunicator::httpRedirectToRoot();
+    long cardId = (*ExternalCommunicator::httpServerPtr).arg("cardid").toInt();
+    log("Activating interlock with " + String(cardId) + "via HTTP");
+    if ((*ExternalCommunicator::cardAuthoriserPtr).checkCard(cardId)) {
+        ExternalCommunicator::changeState = State::ACCESS_GRANTED;
+        ExternalCommunicator::changeStateFlag = true;
+        ExternalCommunicator::httpRedirectToRoot();
+    }
 }
 
 // Action to take on http://device.local/bump

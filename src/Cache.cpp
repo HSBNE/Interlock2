@@ -1,31 +1,58 @@
 #include "Cache.h"
 
-Cache::Cache(HTTPClient *client) : httpClientPtr(client) {
+Cache::Cache() {}
 
+void Cache::begin() {
     // Mount FS
     if (!LittleFS.begin()) {
         // TODO actually handle this error
         log("Failed to mount file system.");
         return;
     }
+    log("Mounted file system");
 
-    this->updateCacheFile();
-    this->readCacheContentsToMemory();
+    if (this->updateCacheFile()) {
+        this->readCacheContentsToMemory();
+    }
 }
 
 String Cache::getHash() {
     return Cache::hash;
 }
 
+// Updates cache from the server.
+// Returns false on failure, true on success
+bool Cache::updateCacheFile() {
+    // Get payload and check for success
+    String payload = httpGET(String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/authorised/?secret=" + String(Core::hostSecret));
+    if (payload == "") {
+        return false;
+    }
+
+    // Write to cache file
+    File cacheFile = LittleFS.open("/cache.json", "w");
+    if (!cacheFile) {
+        log("Could not open cache file to write contents.");
+        return false;
+    }
+    cacheFile.print(payload + '\n');
+    cacheFile.close();
+    log("Succesfully wrote cache file.");
+    return true;
+}
+
 // Will read the cache content to memory if the current cache has is different from the server hash
-inline void Cache::readCacheContentsToMemory() {
+// Returns false on failure, true on success
+bool Cache::readCacheContentsToMemory() {
     // Clear the old cache
     std::memset(Cache::cacheArray, 0, sizeof(Cache::cacheArray));
 
     // Read cache file and store to buffer.
-    File cacheFile = LittleFS.open("/cache", "r");
-    if (cacheFile) {
-        log("Failed to open cache file.");
+    File cacheFile = LittleFS.open("/cache.json", "r");
+    if (!cacheFile) {
+        log("Failed to open cache file.");;
+        cacheFile.close();
+        return false;
     }
     String cacheBuffer = cacheFile.readStringUntil('\n');
     cacheFile.close();
@@ -45,27 +72,8 @@ inline void Cache::readCacheContentsToMemory() {
 
     // Set flag
     Cache::tagsLoadedInMemory = true;
-}
-
-// Updates cache from the server.
-void Cache::updateCacheFile() {
-    // Get payload and check for success
-    String payload = httpGET(Cache::httpClientPtr, String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/authorised/?secret=" + String(Core::hostSecret));
-    if (payload == "") {
-        return;
-    }
-
-    // Write to cache file
-    File cacheFile = LittleFS.open("/cache", "w");
-    if (!cacheFile) {
-        log("Could not open cache file to write contents.");
-        return;
-    }
-    cacheFile.print(payload + '\n');
-    cacheFile.close();
-
-    // Update tags in memory and the hash
-    this->readCacheContentsToMemory();
+    log("Loaded cards into memory.");
+    return true;
 }
 
 bool Cache::checkCacheForCard(long cardNumber) {

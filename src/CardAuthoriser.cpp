@@ -1,8 +1,11 @@
 #include "CardAuthoriser.h"
 
-CardAuthoriser::CardAuthoriser(HTTPClient *client) : cache(client) {
-    CardAuthoriser::httpClientPtr = client;
+CardAuthoriser::CardAuthoriser() { }
+
+void CardAuthoriser::begin() {
+    CardAuthoriser::cache.begin();
 }
+
 
 bool CardAuthoriser::checkCard(long cardNumber) {
     log("Checking for authorization");
@@ -16,14 +19,15 @@ bool CardAuthoriser::checkCard(long cardNumber) {
     bool accessGranted;
 
     // HTTP
-    String payload = httpGET(CardAuthoriser::httpClientPtr, String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/check/" + String(cardNumber) + "/?secret=" + String(Core::hostSecret));
+    String payload = httpGET(String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/check/" + String(cardNumber) + "/?secret=" + String(Core::hostSecret));
+    log("[Network card auth] HTTP Payload: " + payload);
     if (payload != "") {
         // Auth with network
         const size_t capacity = JSON_OBJECT_SIZE(4) + 90;
-        DynamicJsonDocument doc(capacity);
-        deserializeJson(doc, payload);
-        accessGranted = doc["access"].as<String>() == "true";
-        doc.clear();
+        DynamicJsonDocument jsonDoc(capacity);
+        deserializeJson(jsonDoc, payload);
+        accessGranted = jsonDoc["access"].as<String>() == "true";
+        jsonDoc.clear();
 
     } else {
         // Use cache
@@ -37,8 +41,8 @@ bool CardAuthoriser::checkCard(long cardNumber) {
 
 void CardAuthoriser::update() {
     // Get HTTP checkin response
-    String payload = httpGET(CardAuthoriser::httpClientPtr, String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/checkin/?secret=" + String(Core::hostSecret));
-
+    String payload = httpGET(String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/checkin/?secret=" + String(Core::hostSecret));
+    log("[Update] HTTP Payload: " + payload);
     // Check for success
     if (payload == "") {
         return;
@@ -47,12 +51,14 @@ void CardAuthoriser::update() {
     // Parse JSON
     const size_t capacity = JSON_OBJECT_SIZE(3) + 70;
     DynamicJsonDocument jsonDoc(capacity);
+    deserializeJson(jsonDoc, payload);
     String serverHash = jsonDoc["hashOfTags"].as<String>();
 
     // Check if the cache needs updating an do so if required.
-    if (serverHash != cache.getHash()) {
+    if (serverHash != CardAuthoriser::cache.getHash()) {
         cache.updateCacheFile();
     }
+    jsonDoc.clear();
 
 }
 
