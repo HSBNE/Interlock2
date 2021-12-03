@@ -16,7 +16,7 @@ const char* wifiSSID = "HSBNEInfra";
 const char* hostAddress = "https://portal.hsbne.org";
 
 // Device
-const char* deviceName = "DOOR-Front";
+const char* deviceName = "DOOR-TEST";
 const uint8_t relayPin = 12;
 const uint8_t onboardLEDPin = 13;
 const uint8_t indicatorLEDPin = 14;
@@ -26,8 +26,7 @@ const uint8_t openTime = 10; // Time (s) to keep the door unlocked when a swipe 
 
 // LEDs
 const uint8_t numberOfLEDs = 1;
-const uint8_t ledType = NEO_GRBW + NEO_KHZ800; // Most interlocks are NEO_GRB, most doors are NEO_GRBW
-
+const neoPixelType ledType = NEO_GRBW + NEO_KHZ800; // Most interlocks are NEO_GRB, most doors are NEO_GRBW
 
 // RFID
 const uint32_t rfidIgnoreTime = 3; // How long (s) to ignore RFID reads after one has been read.

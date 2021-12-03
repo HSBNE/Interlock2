@@ -5,6 +5,7 @@
 Indicator::Indicator() {
     Indicator::indicatorLEDs = Adafruit_NeoPixel(Core::numberOfLEDs, Core::indicatorLEDPin, Core::ledType);
     Indicator::lastInidcatorState = Core::currentState;
+    this->update();
     Indicator::indicatorLEDs.begin();
 }
 
@@ -51,6 +52,7 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
             break;
     }
 
+    log("COLOR = " + String(color));
     Indicator::indicatorLEDs.fill(color, 0, 0);
     Indicator::indicatorLEDs.show();
 }

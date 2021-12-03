@@ -67,6 +67,7 @@ void setup() {
     setupWifI();
 
     // OTA
+    ArduinoOTA.setPort(8266);
     ArduinoOTA.setHostname(Core::deviceName);
     ArduinoOTA.setPassword(Core::otaPassword);
     ArduinoOTA.onStart([]() {
@@ -81,7 +82,7 @@ void setup() {
     ArduinoOTA.onError([](ota_error_t error) {
         Serial.printf("Error[%u]: ", error);
         if (error == OTA_AUTH_ERROR)
-            log("Auth Failed. Incorrecto OTA password");
+            log("Auth Failed. Incorrect OTA password");
         else if (error == OTA_BEGIN_ERROR)
             log("Begin Failed. Check firmware size.");
         else if (error == OTA_CONNECT_ERROR)
@@ -192,6 +193,7 @@ inline void errorAction() {
 
 unsigned long lastTime = 0;
 void loop() {
+
     static State lastState;
 
     if (lastState != Core::currentState) {
