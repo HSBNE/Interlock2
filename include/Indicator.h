@@ -5,9 +5,9 @@
 class Indicator {
     public:
         void update();
-        Indicator();
+        void begin();
 
     private:
-        State lastInidcatorState;
+        State lastInidcatorState = State::ERROR;
         Adafruit_NeoPixel indicatorLEDs;
 };

@@ -3,7 +3,7 @@
 CardAuthoriser::CardAuthoriser() { }
 
 void CardAuthoriser::begin() {
-    CardAuthoriser::cache.begin();
+    this->cache.begin();
 }
 
 
@@ -31,7 +31,7 @@ bool CardAuthoriser::checkCard(long cardNumber) {
 
     } else {
         // Use cache
-         accessGranted = CardAuthoriser::cache.checkCacheForCard(cardNumber);
+         accessGranted = this->cache.checkCacheForCard(cardNumber);
     }
 
     const String accessStr = (accessGranted) ? "granted" : "denied";
@@ -55,8 +55,8 @@ void CardAuthoriser::update() {
     String serverHash = jsonDoc["hashOfTags"].as<String>();
 
     // Check if the cache needs updating an do so if required.
-    if (serverHash != CardAuthoriser::cache.getHash()) {
-        cache.updateCacheFile();
+    if (serverHash != this->cache.getHash()) {
+        this->cache.updateCacheFile();
     }
     jsonDoc.clear();
 

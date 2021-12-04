@@ -2,20 +2,19 @@
 
 #include "Indicator.h"
 
-Indicator::Indicator() {
-    Indicator::indicatorLEDs = Adafruit_NeoPixel(Core::numberOfLEDs, Core::indicatorLEDPin, Core::ledType);
-    Indicator::lastInidcatorState = Core::currentState;
+void Indicator::begin() { // 
+    this->indicatorLEDs = Adafruit_NeoPixel(Core::numberOfLEDs, Core::indicatorLEDPin, Core::ledType);
+    this->indicatorLEDs.begin();
     this->update();
-    Indicator::indicatorLEDs.begin();
 }
 
 void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access to invalid address)
-    // Do nothing if the state has not changed. Otherwise update the last state/
-    if (Indicator::lastInidcatorState == Core::currentState) {
+    // Do nothing if the state has not changed. Otherwise update the last state
+    if (this->lastInidcatorState == Core::currentState) {
         return;
-    } else {
-        Indicator::lastInidcatorState = Core::currentState;
     }
+    this->lastInidcatorState = Core::currentState;
+    
 
     // Set the color of the LEDs
     // Uses RGBW color values
@@ -23,36 +22,36 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
     switch (Core::currentState) {
         case State::LOADING:
             // Purple
-            color = Indicator::indicatorLEDs.Color(255, 0, 255, 0);
+            color =  this->indicatorLEDs.Color(255, 0, 255, 0);
             break;
         
         case State::IDLE:
             // Blue
-            color = Indicator::indicatorLEDs.Color(0, 0, 255, 0);
+            color =  this->indicatorLEDs.Color(0, 0, 255, 0);
             break;
 
         case State::ACCESS_GRANTED:
             // Green
-            color = Indicator::indicatorLEDs.Color(0, 255, 0, 0);
+            color =  this->indicatorLEDs.Color(0, 255, 0, 0);
             break;
 
         case State::ACCESS_PULSE:
             // Green
-            color = Indicator::indicatorLEDs.Color(0, 255, 0, 0);
+            color =  this->indicatorLEDs.Color(0, 255, 0, 0);
             break;
 
         case State::ACCESS_DENIED:
             // Red
-            color = Indicator::indicatorLEDs.Color(255, 0, 0, 0);
+            color =  this->indicatorLEDs.Color(255, 0, 0, 0);
             break;
         default:
             // Default is ERROR
             // Yellow
-            color = Indicator::indicatorLEDs.Color(255, 255, 0, 0);
+            color =  this->indicatorLEDs.Color(255, 255, 0, 0);
             break;
     }
 
     log("COLOR = " + String(color));
-    Indicator::indicatorLEDs.fill(color, 0, 0);
-    Indicator::indicatorLEDs.show();
+    this->indicatorLEDs.fill(color, 0, 0);
+    this->indicatorLEDs.show();
 }

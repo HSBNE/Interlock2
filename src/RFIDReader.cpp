@@ -13,7 +13,7 @@ void RFIDReader::flush() {
 // Returns negative values for logical errors and for reads that are too close together.
 long RFIDReader::readCard() {
    // Ignore reads that are too close together in time
-   if ((millis() - RFIDReader::lastReadTime) / 1000 <  Core::rfidIgnoreTime) return -1;
+   if ((millis() - this->lastReadTime) / 1000 <  Core::rfidIgnoreTime) return -1;
 
     char tagData[8]; // Stores raw tag bytes
     unsigned char byteCounter = 0; // Count how many bytes have been read from serial

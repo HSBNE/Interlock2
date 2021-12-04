@@ -17,7 +17,7 @@ void Cache::begin() {
 }
 
 String Cache::getHash() {
-    return Cache::hash;
+    return this->hash;
 }
 
 // Updates cache from the server.
@@ -45,7 +45,7 @@ bool Cache::updateCacheFile() {
 // Returns false on failure, true on success
 bool Cache::readCacheContentsToMemory() {
     // Clear the old cache
-    std::memset(Cache::cacheArray, 0, sizeof(Cache::cacheArray));
+    std::memset(this->cacheArray, 0, sizeof(this->cacheArray));
 
     // Read cache file and store to buffer.
     File cacheFile = LittleFS.open("/cache.json", "r");
@@ -63,29 +63,29 @@ bool Cache::readCacheContentsToMemory() {
     deserializeJson(jsonDoc, cacheBuffer);
 
     // Update cache hash and load cards into memory
-    Cache::hash = jsonDoc["authorised_tags_hash"].as<String>();
+    this->hash = jsonDoc["authorised_tags_hash"].as<String>();
     JsonArray serverCards = jsonDoc["authorised_tags"];
-    copyArray(serverCards, Cache::cacheArray);
+    copyArray(serverCards, this->cacheArray);
 
     // Clean up
     jsonDoc.clear();
 
     // Set flag
-    Cache::tagsLoadedInMemory = true;
+    this->tagsLoadedInMemory = true;
     log("Loaded cards into memory.");
     return true;
 }
 
 bool Cache::checkCacheForCard(long cardNumber) {
     // Check that cache is loaded
-    if (!Cache::tagsLoadedInMemory) {
+    if (!this->tagsLoadedInMemory) {
         log("Tried to check cache when the cache was not laoded.");
         return false;
     }
     
     // Search cache
-    for (uint16_t i = 0; i < sizeof(Cache::cacheArray); i++) {
-        if (Cache::cacheArray[i] == cardNumber) {
+    for (uint16_t i = 0; i < sizeof(this->cacheArray); i++) {
+        if (this->cacheArray[i] == cardNumber) {
             return true;
         }
     }
