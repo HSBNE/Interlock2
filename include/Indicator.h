@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include <NeoPixelBus.h>
 
 class Indicator {
     public:
@@ -9,5 +10,5 @@ class Indicator {
 
     private:
         State lastInidcatorState = State::ERROR;
-        Adafruit_NeoPixel indicatorLEDs;
+        NeoPixelBus<NeoGrbwFeature, NeoEsp8266BitBang800KbpsMethod> led = NeoPixelBus<NeoGrbwFeature, NeoEsp8266BitBang800KbpsMethod>(Core::numberOfLEDs, Core::indicatorLEDPin);
 };

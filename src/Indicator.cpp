@@ -3,9 +3,8 @@
 #include "Indicator.h"
 
 void Indicator::begin() { // 
-    this->indicatorLEDs = Adafruit_NeoPixel(Core::numberOfLEDs, Core::indicatorLEDPin, Core::ledType);
-    this->indicatorLEDs.begin();
-    this->update();
+    this->led.Begin();
+    this->led.Show();    
 }
 
 void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access to invalid address)
@@ -18,40 +17,41 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
 
     // Set the color of the LEDs
     // Uses RGBW color values
-    uint32_t color;
+    RgbwColor color;
     switch (Core::currentState) {
         case State::LOADING:
             // Purple
-            color =  this->indicatorLEDs.Color(255, 0, 255, 0);
+            color = RgbwColor(255, 0, 255, 0);
             break;
         
         case State::IDLE:
             // Blue
-            color =  this->indicatorLEDs.Color(0, 0, 255, 0);
+            color = RgbwColor(255, 0, 255, 0);
             break;
 
         case State::ACCESS_GRANTED:
             // Green
-            color =  this->indicatorLEDs.Color(0, 255, 0, 0);
+            color = RgbwColor(0, 255, 0, 0);
             break;
 
         case State::ACCESS_PULSE:
             // Green
-            color =  this->indicatorLEDs.Color(0, 255, 0, 0);
+            color = RgbwColor(0, 255, 0, 0);
             break;
 
         case State::ACCESS_DENIED:
             // Red
-            color =  this->indicatorLEDs.Color(255, 0, 0, 0);
+            color = RgbwColor(255, 0, 200, 0);
             break;
         default:
             // Default is ERROR
             // Yellow
-            color =  this->indicatorLEDs.Color(255, 255, 0, 0);
+            color = RgbwColor(255, 255, 0, 0);
             break;
     }
 
-    log("COLOR = " + String(color));
-    this->indicatorLEDs.fill(color, 0, 0);
-    this->indicatorLEDs.show();
+    for(uint16_t i = 0; i < Core::numberOfLEDs; i++) {
+        led.SetPixelColor(i, color);
+    }
+    this->led.Show();
 }

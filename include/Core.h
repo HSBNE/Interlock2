@@ -43,8 +43,6 @@ extern const uint8_t openTime;
 
 // LEDs
 extern const uint8_t numberOfLEDs;
-   // TODO possible type error
-extern const neoPixelType ledType;
 
 
 // RFID

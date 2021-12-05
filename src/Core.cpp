@@ -26,7 +26,6 @@ const uint8_t openTime = 15; // Time (s) to keep the door unlocked when a swipe 
 
 // LEDs
 const uint8_t numberOfLEDs = 16;
-const neoPixelType ledType = NEO_GRBW + NEO_KHZ800; // Most interlocks are NEO_GRB, most doors are NEO_GRBW
 
 // RFID
 const uint32_t rfidIgnoreTime = 3; // How long (s) to ignore RFID reads after one has been read.
