@@ -26,7 +26,7 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
         
         case State::IDLE:
             // Blue
-            color = RgbwColor(255, 0, 255, 0);
+            color = RgbwColor(0, 0, 255, 0);
             break;
 
         case State::ACCESS_GRANTED:
@@ -41,7 +41,7 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
 
         case State::ACCESS_DENIED:
             // Red
-            color = RgbwColor(255, 0, 200, 0);
+            color = RgbwColor(255, 0, 0, 0);
             break;
         default:
             // Default is ERROR

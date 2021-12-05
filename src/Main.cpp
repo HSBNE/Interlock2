@@ -1,16 +1,16 @@
+#include <ArduinoOTA.h>
+
 #include "CardAuthoriser.h"
 #include "Core.h"
+#include "ExternalCommunicator.h"
 #include "Indicator.h"
 #include "RFIDReader.h"
-#include "ExternalCommunicator.h"
-
-#include <ArduinoOTA.h>
 
 // Objects
 RFIDReader rfidReader;
 Indicator indicator;
 CardAuthoriser cardAuthoriser;
-ExternalCommunicator external(&cardAuthoriser); // External communicator is a misleading name.
+ExternalCommunicator external(&cardAuthoriser);  // External communicator is a misleading name.
 
 // TODO it would be nice to move this so it's implemented in Core.cpp In the current scheme Core.h is implmented in two files (here and Core.cpp)
 void log(String message) {
@@ -40,10 +40,18 @@ inline void setupWifI() {
 //    true: open door / activate interlock
 //    false lock door / turn off interlock.
 void setRelay(bool accessGranted) {
-    if (Core::normallyOpen) {
-        digitalWrite(Core::relayPin, LOW);
+    if (accessGranted) {
+        if (Core::normallyOpen) {
+            digitalWrite(Core::relayPin, HIGH);
+        } else {
+            digitalWrite(Core::relayPin, LOW);
+        }
     } else {
-        digitalWrite(Core::relayPin, HIGH);
+        if (Core::normallyOpen) {
+            digitalWrite(Core::relayPin, LOW);
+        } else {
+            digitalWrite(Core::relayPin, HIGH);
+        }
     }
 }
 
@@ -114,7 +122,7 @@ inline void idleAction() {
 
     // Check for available card Data
     if (Serial.available()) {
-        log("Checking serial buffer"); // TODO remove
+        log("Checking serial buffer");  // TODO remove
         long cardNumber = rfidReader.readCard();
 
         // Check that the read was valid / the reader did not encounter an error
@@ -126,13 +134,12 @@ inline void idleAction() {
             return;
         }
 
-// Pulse access for doors and grant access for interlocks
+        // Pulse access for doors and grant access for interlocks
         if (Core::deviceType == DeviceType::DOOR) {
             Core::currentState = State::ACCESS_PULSE;
         } else if (Core::deviceType == DeviceType::INTERLOCK) {
             Core::currentState = State::ACCESS_GRANTED;
         }
-        
 
         // Update LED indicator color
         indicator.update();
@@ -189,11 +196,8 @@ inline void errorAction() {
     // TODO
 }
 
-
-
 unsigned long lastTime = 0;
 void loop() {
-
     static State lastState;
 
     if (lastState != Core::currentState) {
@@ -219,7 +223,7 @@ void loop() {
             accessDeniedAction();
             break;
 
-        default: // Error.
+        default:  // Error.
             errorAction();
             break;
     }
