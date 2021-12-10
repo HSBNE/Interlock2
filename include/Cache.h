@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Secrets.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 #include <mem.h>

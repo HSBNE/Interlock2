@@ -2,6 +2,7 @@
 
 #include "CardAuthoriser.h"
 #include "Core.h"
+#include "Secrets.h"
 #include "ExternalCommunicator.h"
 #include "Indicator.h"
 #include "RFIDReader.h"
@@ -135,9 +136,9 @@ inline void idleAction() {
         }
 
         // Pulse access for doors and grant access for interlocks
-        if (Core::deviceType == DeviceType::DOOR) {
+        if (Core::deviceType == DeviceType::DOOR_DEVICE) {
             Core::currentState = State::ACCESS_PULSE;
-        } else if (Core::deviceType == DeviceType::INTERLOCK) {
+        } else if (Core::deviceType == DeviceType::INTERLOCK_DEVICE) {
             Core::currentState = State::ACCESS_GRANTED;
         }
 

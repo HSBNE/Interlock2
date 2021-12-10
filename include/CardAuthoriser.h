@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Secrets.h"
 #include "Cache.h"
 #include <WiFiClientSecureBearSSL.h>
 #include <ArduinoJson.h>

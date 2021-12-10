@@ -1,55 +1,8 @@
 #include "Core.h"
+#include "Secrets.h"
 
 namespace Core {
-// ===============================================================================
-//                             Configurable Values
-// ===============================================================================
-
-// Secrets are kept in secrets.cpp
-
-// INTERLOCK or DOOR
-DeviceType deviceType = DeviceType::INTERLOCK;
-#define INTERLOCK
-//#define DOOR
-
-// Wifi
-const char* wifiSSID = "HSBNEInfra";
-const char* hostAddress = "https://portal.hsbne.org";
-
-// Device
-const char* deviceName = "INT-Woodshop-CNC";
-const uint8_t relayPin = 12;
-const uint8_t onboardLEDPin = 13;
-const uint8_t indicatorLEDPin = 14;
-
-// Door settings
-const uint8_t openTime = 15; // Time (s) to keep the door unlocked when a swipe occurs
-
-// LEDs
-const uint8_t numberOfLEDs = 1;
-
-// RFID
-const uint32_t rfidIgnoreTime = 3; // How long (s) to ignore RFID reads after one has been read.
-
-// Server
-const uint16_t serverUpdateRate = 60; // How long (s) between server checkins
-
-// ===============================================================================
-//                           End Of Configurable Values
-// ===============================================================================
-
-#ifdef DOOR
-const char* deviceTypeStr = "door";
-const bool normallyOpen = false;
-#endif
-#ifdef INTERLOCK
-const char* deviceTypeStr = "interlock";
-const bool normallyOpen = true;
-#endif
-
-// State
-State currentState = State::LOADING;
-
+    State currentState = State::LOADING;
 }
 
 // Performs an HTTP GET request on the URL.

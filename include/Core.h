@@ -1,4 +1,5 @@
-#pragma once
+#ifndef InterlockCore
+#define InterlockCore
 
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
@@ -16,8 +17,8 @@ enum State {
 };
 
 enum DeviceType {
-   DOOR = 0,
-   INTERLOCK = 1
+   DOOR_DEVICE = 0,
+   INTERLOCK_DEVICE = 1
 };
 
 namespace Core {
@@ -25,46 +26,56 @@ namespace Core {
 //                             Configurable Values
 // ===============================================================================
 
-// Secrets are kept in secrets.h
+// Secrets are kept in secrets.cpp
+
+// INTERLOCK or DOOR
+//#define INTERLOCK
+#define DOOR
 
 // Wifi
-extern const char* wifiSSID;
-extern const char* hostAddress;
+inline const char* wifiSSID = "HSBNEInfra";
+inline const char* hostAddress = "https://portal.hsbne.org";
 
 // Device
-extern const char* deviceName;
-extern const uint8_t relayPin;
-extern const uint8_t onboardLEDPin;
-extern const uint8_t indicatorLEDPin;
-extern DeviceType deviceType;
+inline const char* deviceName = "DOOR-Front";
+inline const uint8_t relayPin = 12;
+inline const uint8_t onboardLEDPin = 13;
+inline const uint8_t indicatorLEDPin = 14;
 
 // Door settings
-extern const uint8_t openTime;
+inline const uint8_t openTime = 15; // Time (s) to keep the door unlocked when a swipe occurs
 
 // LEDs
-extern const uint8_t numberOfLEDs;
-
+inline const uint8_t numberOfLEDs = 16;
 
 // RFID
-extern const uint32_t rfidIgnoreTime;
+inline const uint32_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
 
 // Server
-extern const uint16_t serverUpdateRate;
+inline const uint16_t serverUpdateRate = 60; // How long (s) between server checkins
 
-extern const char* deviceTypeStr;
-extern const bool normallyOpen;
+// ===============================================================================
+//                           End Of Configurable Values
+// ===============================================================================
+
+# ifdef DOOR
+inline const char* deviceTypeStr = "door";
+inline const bool normallyOpen = false;
+inline DeviceType deviceType = DeviceType::DOOR_DEVICE;
+# endif
+# ifdef INTERLOCK
+inline const char* deviceTypeStr = "interlock";
+inline const bool normallyOpen = true;
+inline DeviceType deviceType = DeviceType::INTERLOCK_DEVICE;
+# endif
 
 // State
 extern State currentState;
 
-//Secrets
-extern const char* wifiPassword;
-extern const char* otaPassword;
-extern const char* hostSecret;
-extern const long skeletonKeyCardNumber;
 }
 
 void log(String message);
 
 String httpGET(String url);
 
+#endif
