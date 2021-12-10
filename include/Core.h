@@ -51,6 +51,10 @@ inline const uint8_t numberOfLEDs = 16;
 // RFID
 inline const uint32_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
 
+// Change to the correct reader for the device
+//#define OLD_READER
+#define RF125PS_READER // (new reader)
+
 // Server
 inline const uint16_t serverUpdateRate = 60; // How long (s) between server checkins
 
