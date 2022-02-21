@@ -29,15 +29,15 @@ namespace Core {
 // Secrets are kept in secrets.cpp
 
 // INTERLOCK or DOOR
-//#define INTERLOCK
-#define DOOR
+#define INTERLOCK
+//#define DOOR
 
 // Wifi
 inline const char* wifiSSID = "HSBNEInfra";
 inline const char* hostAddress = "https://portal.hsbne.org";
 
 // Device
-inline const char* deviceName = "DOOR-Front";
+inline const char* deviceName = "INT-WS-DrumSander";
 inline const uint8_t relayPin = 12;
 inline const uint8_t onboardLEDPin = 13;
 inline const uint8_t indicatorLEDPin = 14;
@@ -46,14 +46,18 @@ inline const uint8_t indicatorLEDPin = 14;
 inline const uint8_t openTime = 15; // Time (s) to keep the door unlocked when a swipe occurs
 
 // LEDs
-inline const uint8_t numberOfLEDs = 16;
+inline const uint8_t numberOfLEDs = 1;
+
+// LED RGBW order (one or the other)
+//#define GRBW  // Usually on newer interlocks
+#define RGBW // Usually on older interlocks
 
 // RFID
 inline const uint32_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
 
 // Change to the correct reader for the device
-//#define OLD_READER
-#define RF125PS_READER // (new reader)
+#define OLD_READER
+//#define RF125PS_READER // (new reader)
 
 // Server
 inline const uint16_t serverUpdateRate = 60; // How long (s) between server checkins

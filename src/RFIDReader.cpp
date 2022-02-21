@@ -46,13 +46,14 @@ long RFIDReader::readCard() {
 
     if (Serial.readBytes(tagBytes, 5) == 5) {
         uint32_t cardId = 0;
-        tagBytes[6] = 0;
+        //tagBytes[6] = 0;
 
         for (int i = 0; i < 4; i++) {
             cardId = cardId << 8 | tagBytes[i];
         }
         this->flush();
-        return(cardId)
+        return cardId;
     }
+    return -1;
 #endif
 }
