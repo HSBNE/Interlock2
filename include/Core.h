@@ -7,6 +7,10 @@
 #include <WiFiClientSecureBearSSL.h>
 #include <ESP8266WiFi.h>
 
+// Macros for build flags
+#define ST(A) #A
+#define STR(A) ST(A)
+
 enum State {
    IDLE, // Normal state of interlock (not being used)
    LOADING, // State while the device is booting up
@@ -29,15 +33,15 @@ namespace Core {
 // Secrets are kept in secrets.cpp
 
 // INTERLOCK or DOOR
-#define INTERLOCK
+//#define INTERLOCK
 //#define DOOR
 
 // Wifi
-inline const char* wifiSSID = "HSBNEInfra";
-inline const char* hostAddress = "https://portal.hsbne.org";
+inline const char* wifiSSID = STR(WIFI_SSID);
+inline const char* hostAddress = STR(HOST_ADDRESS);
 
 // Device
-inline const char* deviceName = "INT-WS-DrumSander";
+inline const char* deviceName = STR(DEVICE_NAME);
 inline const uint8_t relayPin = 12;
 inline const uint8_t onboardLEDPin = 13;
 inline const uint8_t indicatorLEDPin = 14;
@@ -46,17 +50,17 @@ inline const uint8_t indicatorLEDPin = 14;
 inline const uint8_t openTime = 15; // Time (s) to keep the door unlocked when a swipe occurs
 
 // LEDs
-inline const uint8_t numberOfLEDs = 1;
+inline const uint8_t numberOfLEDs = N_LEDS;
 
 // LED RGBW order (one or the other)
 //#define GRBW  // Usually on newer interlocks
-#define RGBW // Usually on older interlocks
+//#define RGBW // Usually on older interlocks
 
 // RFID
 inline const uint32_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
 
 // Change to the correct reader for the device
-#define OLD_READER
+//#define OLD_READER
 //#define RF125PS_READER // (new reader)
 
 // Server
