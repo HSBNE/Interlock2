@@ -114,15 +114,16 @@ void setup() {
 // Idle.
 // The device will normally be in this mode (locked door / unpowered interlock)
 // * In this state we check to see if a card can be read and then take action.
+//      This read will only occur after a delay. This prevents people accidentally 'tapping off' and then 'tapping back on' right away.
 // * On a successful read we will go into ACCESS_PULSE for a door or ACCESS_GRANTED for an
 //   interlock.
 // * On a bad read we go into ACCESS_DENIED
-inline void idleAction() {
+inline void idleAction(unsigned long lastTimeStateChanged) {
     // Ensure the relay is in the correct position.
     setRelay(false);
 
-    // Check for available card Data
-    if (Serial.available()) {
+    // Check for available card Datas
+    if (Serial.available() && ((millis() - lastTimeStateChanged) / 1000) > Core::rfidLockoutTime) {
         log("Checking serial buffer");  // TODO remove
         long cardNumber = rfidReader.readCard();
 
@@ -152,13 +153,14 @@ inline void idleAction() {
 // until it is swiped off.
 // * In this state we check for any card read.
 // * The power to the relay is kept on.
-// * If any card read occurs, authourized or not, we will go into idle mode and cut power.
-inline void accessGrantedAction() {
+// * After a delay, if any card read occurs, authourized or not, we will go into idle mode and cut power.
+inline void accessGrantedAction(unsigned long lastTimeStateChanged) {
     // Turn on relay
     digitalWrite(Core::relayPin, HIGH);
 
     // Check for valid card (authourized and unauthourized) reads. If there is one, change state to IDLE
-    if (Serial.available()) {
+    // Only check for a valid card after a delay. This prevents people from accidentally turning on a machine and then turning it off right away.
+    if (Serial.available() && ((millis() - lastTimeStateChanged) / 1000) > Core::rfidLockoutTime) {
         if (rfidReader.readCard() > 0) {
             Core::currentState = State::IDLE;
         }
@@ -197,23 +199,26 @@ inline void errorAction() {
     // TODO
 }
 
-unsigned long lastTime = 0;
+
 void loop() {
     static State lastState;
+    static unsigned long lastTime = 0; // Used to slow down request to the server
+    static unsigned long lastTimeStateChanged = 0; // Used to determine how long we have been in a state.
 
     if (lastState != Core::currentState) {
         log("Current state: " + String(Core::currentState));
         lastState = Core::currentState;
+        lastTimeStateChanged = millis();
     }
 
     // Do state machine
     switch (Core::currentState) {
         case State::IDLE:
-            idleAction();
+            idleAction(lastTimeStateChanged);
             break;
 
         case State::ACCESS_GRANTED:
-            accessGrantedAction();
+            accessGrantedAction(lastTimeStateChanged);
             break;
 
         case State::ACCESS_PULSE:
@@ -231,9 +236,6 @@ void loop() {
 
     // Check if the state needs to change due to an external trigger (e.g. HTTP)
     Core::currentState = external.checkForStateChange();
-
-    // Update the indicator for no reason other than a warm fuzzy feeling.
-    indicator.update();
 
     // Flush the serial buffer
     rfidReader.flush();

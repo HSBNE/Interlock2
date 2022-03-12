@@ -28,6 +28,7 @@ enum DeviceType {
 namespace Core {
 // ===============================================================================
 //                             Configurable Values
+//     Values that are commented out should be set using build flags.
 // ===============================================================================
 
 // Secrets are kept in secrets.cpp
@@ -57,7 +58,8 @@ inline const uint8_t numberOfLEDs = N_LEDS;
 //#define RGBW // Usually on older interlocks
 
 // RFID
-inline const uint32_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
+inline const uint8_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
+inline const uint8_t rfidLockoutTime = 15; // How long (s) to prevent a user 'tapping off' a machine after they have 'tapped on and vice versa.
 
 // Change to the correct reader for the device
 //#define OLD_READER
