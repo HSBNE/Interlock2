@@ -41,7 +41,7 @@ namespace Core {
 
 // Wifi
 inline const char* wifiSSID = WIFI_SSID;
-inline const char* hostAddress = "https://portal.hsbne.org";
+inline const char* hostAddress = HOST_ADDRESS;
 
 // Device
 inline const char* deviceName = DEVICE_NAME;
