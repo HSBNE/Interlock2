@@ -20,8 +20,8 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
     RgbwColor color;
     switch (Core::currentState) {
         case State::LOADING:
-            // Purple
-            color = RgbwColor(255, 0, 255, 0);
+            // White
+            color = RgbwColor(255, 255, 255, 255);
             break;
         
         case State::IDLE:

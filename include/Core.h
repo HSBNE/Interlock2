@@ -8,7 +8,7 @@
 #include <ESP8266WiFi.h>
 
 // Macros for build flags
-#define ST(A) #A
+#define ST(A...) #A
 #define STR(A) ST(A)
 
 enum State {
@@ -16,6 +16,7 @@ enum State {
    EXIT_IDLE, // Exiting the idle state and deciding which state to go into next. Allows a prompt to be sent to the user to say the card has been read.
    LOADING, // State while the device is booting up
    ACCESS_GRANTED, // Device will allow asccess until the state changes. E.g. an interlock keeping a tool on
+   EXIT_ACCESS_GRANTED, // Exiting the ACCESS_GRANTED state. Allows a prompt to be sent to the user.
    ACCESS_DENIED, // Device will display access denied messages and then revert to normal modes
    ACCESS_PULSE, // Device will allow access for a given timeframe. E.g. a door opening and then locking a few seconds later
    ERROR // Uh oh
@@ -40,7 +41,7 @@ namespace Core {
 
 // Wifi
 inline const char* wifiSSID = STR(WIFI_SSID);
-inline const char* hostAddress = STR(HOST_ADDRESS);
+inline const char* hostAddress = "https://portal.int.hsbne.org";
 
 // Device
 inline const char* deviceName = STR(DEVICE_NAME);
@@ -60,7 +61,7 @@ inline const uint8_t numberOfLEDs = N_LEDS;
 
 // RFID
 inline const uint8_t rfidIgnoreTime = 4; // How long (s) to ignore RFID reads after one has been read.
-inline const uint8_t rfidLockoutTime = 10; // How long (s) to prevent a user 'tapping off' a machine after they have 'tapped on and vice versa.
+inline const uint8_t rfidLockoutTime = 5; // How long (s) to prevent a user 'tapping off' a machine after they have 'tapped on and vice versa.
 
 // Change to the correct reader for the device
 //#define OLD_READER

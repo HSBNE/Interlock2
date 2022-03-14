@@ -154,6 +154,8 @@ inline void exitIdleAction() {
     } else if (Core::deviceType == DeviceType::INTERLOCK_DEVICE) {
         Core::currentState = State::ACCESS_GRANTED;
     }
+
+    // Do not flush the serial buffer.
 }
 
 // Access Granted
@@ -170,12 +172,21 @@ inline void accessGrantedAction(unsigned long lastTimeStateChanged) {
     // Only check for a valid card after a delay. This prevents people from accidentally turning on a machine and then turning it off right away.
     if (Serial.available() && ((millis() - lastTimeStateChanged) / 1000) > Core::rfidLockoutTime) {
         if (rfidReader.readCard() > 0) {
-            Core::currentState = State::IDLE;
+            Core::currentState = State::EXIT_ACCESS_GRANTED;
         }
     }
 
     indicator.update();
+    rfidReader.flush();
 }
+
+inline void exitAccessGrantedAction() {
+    indicator.update();
+    delay(2000);
+    Core::currentState = State::IDLE;
+    rfidReader.flush();
+}
+
 
 // Access Pulse
 // Doors will be in the mode when they are unlocked. They will stay in this mode for the specified time in
@@ -189,6 +200,7 @@ inline void accessPulseAction() {
     setRelay(false);
     indicator.update();
     Core::currentState = State::IDLE;
+    rfidReader.flush();
 }
 
 // Access Denied
@@ -201,6 +213,7 @@ inline void accessDeniedAction() {
     indicator.update();
     delay(2000);
     Core::currentState = State::IDLE;
+    rfidReader.flush();
 }
 
 inline void errorAction() {
@@ -234,6 +247,10 @@ void loop() {
             accessGrantedAction(lastTimeStateChanged);
             break;
 
+        case State::EXIT_ACCESS_GRANTED:
+            exitAccessGrantedAction();
+            break;
+
         case State::ACCESS_PULSE:
             accessPulseAction();
             break;
@@ -249,9 +266,6 @@ void loop() {
 
     // Check if the state needs to change due to an external trigger (e.g. HTTP)
     Core::currentState = external.checkForStateChange();
-
-    // Flush the serial buffer
-    rfidReader.flush();
 
     // Loop server
     external.loop();
