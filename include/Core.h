@@ -40,11 +40,11 @@ namespace Core {
 //#define DOOR
 
 // Wifi
-inline const char* wifiSSID = STR(WIFI_SSID);
+inline const char* wifiSSID = WIFI_SSID;
 inline const char* hostAddress = "https://portal.hsbne.org";
 
 // Device
-inline const char* deviceName = STR(DEVICE_NAME);
+inline const char* deviceName = DEVICE_NAME;
 inline const uint8_t relayPin = 12;
 inline const uint8_t onboardLEDPin = 13;
 inline const uint8_t indicatorLEDPin = 14;
