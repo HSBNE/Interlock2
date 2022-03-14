@@ -113,38 +113,46 @@ void setup() {
 
 // Idle.
 // The device will normally be in this mode (locked door / unpowered interlock)
-// * In this state we check to see if a card can be read and then take action.
-//      This read will only occur after a delay. This prevents people accidentally 'tapping off' and then 'tapping back on' right away.
-// * On a successful read we will go into ACCESS_PULSE for a door or ACCESS_GRANTED for an
-//   interlock.
-// * On a bad read we go into ACCESS_DENIED
+// * In this state we check to see if a card can be read. If it can, we enmter EXIT_IDLE
+//   This read will only occur after a delay. This prevents people accidentally 'tapping off' and then 'tapping back on' right away.
 inline void idleAction(unsigned long lastTimeStateChanged) {
     // Ensure the relay is in the correct position.
     setRelay(false);
 
-    // Check for available card Datas
+    // Check for available card Data
     if (Serial.available() && ((millis() - lastTimeStateChanged) / 1000) > Core::rfidLockoutTime) {
-        log("Checking serial buffer");  // TODO remove
-        long cardNumber = rfidReader.readCard();
+        Core::currentState = State::EXIT_IDLE;
+    }
+    indicator.update();
+}
 
-        // Check that the read was valid / the reader did not encounter an error
-        if (cardNumber < 0) return;
+// Exit Idle
+// * Read the RFID card
+// 
+// * On a successful read we will go into ACCESS_PULSE for a door or ACCESS_GRANTED for an
+//   interlock.
+// * On a bad read we go into ACCESS_DENIED
+inline void exitIdleAction() {
+    indicator.update();
+    long cardNumber = rfidReader.readCard();
 
-        // Check if card is authorised
-        if (!cardAuthoriser.checkCard(cardNumber)) {
-            Core::currentState = State::ACCESS_DENIED;
-            return;
-        }
+    // Check that the read was valid / the reader did not encounter an error
+    if (cardNumber < 0) {
+        Core::currentState = State::IDLE;
+        return;
+    }
 
-        // Pulse access for doors and grant access for interlocks
-        if (Core::deviceType == DeviceType::DOOR_DEVICE) {
-            Core::currentState = State::ACCESS_PULSE;
-        } else if (Core::deviceType == DeviceType::INTERLOCK_DEVICE) {
-            Core::currentState = State::ACCESS_GRANTED;
-        }
+    // Check if card is authorised
+    if (!cardAuthoriser.checkCard(cardNumber)) {
+        Core::currentState = State::ACCESS_DENIED;
+        return;
+    }
 
-        // Update LED indicator color
-        indicator.update();
+    // Pulse access for doors and grant access for interlocks
+    if (Core::deviceType == DeviceType::DOOR_DEVICE) {
+        Core::currentState = State::ACCESS_PULSE;
+    } else if (Core::deviceType == DeviceType::INTERLOCK_DEVICE) {
+        Core::currentState = State::ACCESS_GRANTED;
     }
 }
 
@@ -197,6 +205,7 @@ inline void accessDeniedAction() {
 
 inline void errorAction() {
     // TODO
+    indicator.update();
 }
 
 
@@ -215,6 +224,10 @@ void loop() {
     switch (Core::currentState) {
         case State::IDLE:
             idleAction(lastTimeStateChanged);
+            break;
+
+        case State::EXIT_IDLE:
+            exitIdleAction();
             break;
 
         case State::ACCESS_GRANTED:

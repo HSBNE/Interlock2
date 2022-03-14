@@ -29,9 +29,19 @@ void Indicator::update() { // TODO Using 16 LEDs triggers Exception 28 (Access t
             color = RgbwColor(0, 0, 255, 0);
             break;
 
+        case State::EXIT_IDLE:
+            // Purple
+            color = RgbwColor(255, 0, 255, 0);
+            break;
+
         case State::ACCESS_GRANTED:
             // Green
             color = RgbwColor(0, 255, 0, 0);
+            break;
+
+        case State::EXIT_ACCESS_GRANTED:
+            // Purple
+            color = RgbwColor(255, 0, 255, 0);
             break;
 
         case State::ACCESS_PULSE:
