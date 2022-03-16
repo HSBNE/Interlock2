@@ -47,10 +47,8 @@ void ExternalCommunicator::loop() {
 
 // Action to take on http://device.local/
 void ExternalCommunicator::httpRoot() {
-  String message = "<html><head><script>var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);connection.onopen = function () {  connection.send('Connect ' + new Date()); }; connection.onerror = function (error) {    console.log('WebSocket Error ', error);};connection.onmessage = function (e) {  console.log('Server: ', e.data); var logObj = document.getElementById('logs'); logObj.insertAdjacentHTML('afterend', e.data + '</br>');;};</script><title>" + String(Core::deviceName) + "</title></head>";
-  message += "<h1>" + String(Core::deviceName) + "</h1>";
-  message += "<h2>Logs: </h2> <div id ='logs'> </div> ";
-  (*ExternalCommunicator::httpServerPtr).send(200, "text/html", message);
+  static const String message = "<html><head><script>var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);connection.onopen = function () {  connection.send('Connect ' + new Date()); }; connection.onerror = function (error) {    console.log('WebSocket Error ', error);};connection.onmessage = function (e) {  console.log('Server: ', e.data); var logObj = document.getElementById('logs'); logObj.insertAdjacentHTML('afterend', e.data + '</br>');;};</script><title>" + String(Core::deviceName) + "</title></head><h1>" + String(Core::deviceName) + "</h1><h2>Logs: </h2> <div id ='logs'> </div> ";
+  ExternalCommunicator::httpServerPtr->send(200, "text/html", message);
 }
 
 // Action to take on http://device.local/reboot

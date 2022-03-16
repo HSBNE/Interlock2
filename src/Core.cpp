@@ -7,7 +7,7 @@ namespace Core {
 
 // Performs an HTTP GET request on the URL.
 // Returns "" on error.
-String httpGET(const String url) {
+String httpGET(String url) {
 
     // Do nothing if WiFi is disconnected.
     if (WiFi.status() != WL_CONNECTED) {

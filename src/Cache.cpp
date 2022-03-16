@@ -38,7 +38,7 @@ bool Cache::updateCacheFile() {
     cacheFile.print(payload + '\n');
     cacheFile.close();
     log("Succesfully wrote cache file.");
-    return true;
+    return readCacheContentsToMemory();
 }
 
 // Will read the cache content to memory if the current cache has is different from the server hash
@@ -65,29 +65,30 @@ bool Cache::readCacheContentsToMemory() {
     // Update cache hash and load cards into memory
     this->hash = jsonDoc["authorised_tags_hash"].as<String>();
     JsonArray serverCards = jsonDoc["authorised_tags"];
-    copyArray(serverCards, this->cacheArray);
+    copyArray(serverCards, cacheArray);
 
     // Clean up
     jsonDoc.clear();
 
     // Set flag
-    this->tagsLoadedInMemory = true;
+    tagsLoadedInMemory = true;
     log("Loaded cards into memory.");
     return true;
 }
 
 bool Cache::checkCacheForCard(long cardNumber) {
     // Check that cache is loaded
-    if (!this->tagsLoadedInMemory) {
-        log("Tried to check cache when the cache was not laoded.");
+    if (!tagsLoadedInMemory) {
+        log("Tried to check cache when the cache was not loaded.");
         return false;
     }
     
     // Search cache
-    for (uint16_t i = 0; i < sizeof(this->cacheArray); i++) {
-        if (this->cacheArray[i] == cardNumber) {
-            return true;
+    for (auto card : cacheArray) {
+        if (card == cardNumber) {
+            return card; // Prevents returning true when inspecting an empty cache value
         }
     }
+
     return false;
 }

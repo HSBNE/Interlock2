@@ -20,15 +20,14 @@ bool CardAuthoriser::checkCard(long cardNumber) {
 
     // HTTP
     String payload = httpGET(String(Core::hostAddress) + "/api/" + Core::deviceTypeStr + "/check/" + String(cardNumber) + "/?secret=" + String(Core::hostSecret));
-    log("[Network card auth] HTTP Payload: " + payload);
     if (payload != "") {
+        log("[Network card auth] HTTP Payload: " + payload);
         // Auth with network
         const size_t capacity = JSON_OBJECT_SIZE(4) + 90;
         DynamicJsonDocument jsonDoc(capacity);
         deserializeJson(jsonDoc, payload);
         accessGranted = jsonDoc["access"].as<String>() == "true";
         jsonDoc.clear();
-
     } else {
         // Use cache
          accessGranted = this->cache.checkCacheForCard(cardNumber);
@@ -55,7 +54,7 @@ void CardAuthoriser::update() {
     String serverHash = jsonDoc["hashOfTags"].as<String>();
 
     // Check if the cache needs updating an do so if required.
-    if (serverHash != this->cache.getHash()) {
+    if (serverHash != cache.getHash()) {
         this->cache.updateCacheFile();
     }
     jsonDoc.clear();

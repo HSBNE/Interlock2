@@ -1,0 +1,140 @@
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412350}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412350}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412412}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412412}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412473}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412473}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412534}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412534}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412595}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412595}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412656}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412656}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+HTTP Request: https://192.168.1.102:5000/api/interlock/checkin/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412717}
+[Update] HTTP Payload: {"success": "true", "hash_of_tags": "6066246618673759645", "timestamp": 1647412717}
+HTTP Request: https://192.168.1.102:5000/api/interlock/authorised/?secret=1234
+HTTP Code: 200
+HTTP Payload: {"authorised_tags_hash": "6066246618673759645", "authorised_tags": ["1456208826", "185600281", "569376973", "1385829622", "1402600956"]}
+Succesfully wrote cache file.
+Loaded cards into memory.
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
+Activating interlock with 0via HTTP
+Checking for authorization
+HTTP Request: https://192.168.1.102:5000/api/interlock/check/0/?secret=1234
+HTTP Code: 404
+1456208826
+185600281
+569376973
+1385829622
+1402600956
+0
+Access denied to 0
