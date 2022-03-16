@@ -8,8 +8,6 @@
 #include <ESP8266WiFi.h>
 
 // Macros for build flags
-#define ST(A...) #A
-#define STR(A) ST(A)
 
 enum State {
    IDLE, // Normal state of interlock (not being used)
