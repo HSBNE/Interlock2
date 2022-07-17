@@ -20,7 +20,7 @@ Use exactly one build flag from each category. Use all build flags with an unspe
 | - | `N_LEDS` | `DNLEDS=16` | How many status light LEDS the device has. Usually 1 for interlocks and 16 for doors.
 | - | `DEVICE_NAME` | `-DDEVICE_NAME="\"FrontDoor\""` | The name of the device, e.g. "FrontDoor". This can be anything (don't use spaces) but make it descriptive. |
 | - | `WIFI_SSID` | `-DWIFI_SSID="\"HSBNEInfra\""` | The WiFi SSID. Please use HSBNEInfra. |
-| - | `WIFI_PASSWORD` | -DWIFI_PASSWORD="\"MyWiFiPassword\"" | The password for the WiFi. |
+| - | `WIFI_PASSWORD` | `-DWIFI_PASSWORD="\"MyWiFiPassword\""` | The password for the WiFi. |
 | - | `HOST_ADDRESS` | `-DHOST_ADDRESS="\"https://portal.hsbne.org\""` | The host address for the interlock ot talk to. Probably `https://portal.hsbne.org`. Do not include a trailing `/`.
 | - | `HOST_SECRET` | `-DHOST_SECRET="\"MyHostSecret\""` | ~ |
 | - | `OTA_PASSWORD` | `-DOTA_PASSWORD="\"MyOTAPasswrod\""` | The password to be used for Over The Air (OTA) firmware updates. __Please do not make one up, use the established password system.__ |
